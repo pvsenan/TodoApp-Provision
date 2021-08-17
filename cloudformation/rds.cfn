@@ -6,7 +6,7 @@ Resources:
   RDSInstanceSecret:
     Type: AWS::SecretsManager::Secret
     Properties:
-      Name: !Join ['-', [!Ref: ParamDbName, "credentials"]]
+      Name: !Join ['-', [!Ref ParamDbName, "credentials"]]
       Description: 'This is the secret for RDS instance'
       GenerateSecretString:
         SecretStringTemplate: '{"username": "admin"}'
