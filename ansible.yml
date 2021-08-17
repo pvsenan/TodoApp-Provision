@@ -1,0 +1,35 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+  - name: create eb environment
+    cloudformation:
+      stack_name: "{{ ParamApplicationName }}-stack"
+      state: present
+      region: "us-east-1"
+      capabilities: CAPABILITY_IAM
+      disable_rollback: true
+      template: ./cloudformation/elasticbeanstalk.cfn
+      template_parameters:
+        ParamEnvironmentName: "{{ ParamEnvironmentName }}"
+        ParamApplicationName: "{{ ParamApplicationName }}"
+        ParamSpringProfilesActive: "{{ ParamSpringProfilesActive }}"
+        ParamHealthUrl:  "{{ ParamHealthUrl }}"
+        ParamSolutionStackName: "{{ ParamSolutionStackName }}"
+    tags:
+     - elasticbeanstalk
+
+  - name: create mysql environment
+    cloudformation:
+      stack_name: "{{ ParamDbName }}-stack"
+      state: present
+      region: "us-east-1"
+      capabilities: CAPABILITY_IAM
+      disable_rollback: true
+      template: ./cloudformation/rds.cfn
+      template_parameters:
+        ParamDbName: "{{ ParamDbName }}"
+    tags:
+     - rds
